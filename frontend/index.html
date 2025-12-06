@@ -1,0 +1,3768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduTracker - College Management Platform</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary-light: #FFE8E8;
+            --secondary-light: #F1F7FF;
+            --accent-light: #E6F7EF;
+            --primary: #FFB6C1;
+            --secondary: #A8D5E2;
+            --accent: #9ED9CC;
+            --text: #5A5A72;
+            --text-dark: #3A3A52;
+            --white: #FFFFFF;
+            --shadow: rgba(149, 157, 165, 0.1);
+            --success: #4CAF50;
+            --warning: #FF9800;
+            --danger: #F44336;
+            --info: #2196F3;
+        }
+
+        body {
+            background-color: var(--secondary-light);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: var(--white);
+            padding: 20px 0;
+            box-shadow: 0 4px 12px var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo i {
+            font-size: 32px;
+            color: var(--primary);
+        }
+
+        .logo h1 {
+            font-size: 28px;
+            color: var(--text-dark);
+            font-weight: 700;
+        }
+
+        .logo span {
+            color: var(--primary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text);
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            background-color: var(--primary-light);
+            color: var(--text-dark);
+        }
+
+        .add-profile-btn {
+            background-color: var(--accent);
+            color: var(--text-dark);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .add-profile-btn:hover {
+            background-color: #7EC4B3;
+            transform: translateY(-2px);
+        }
+
+        /* Main Content Styles */
+        main {
+            padding: 40px 0;
+            min-height: calc(100vh - 180px);
+        }
+
+        /* Login Page Styles */
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: calc(100vh - 180px);
+        }
+
+        .login-card {
+            background-color: var(--white);
+            border-radius: 20px;
+            box-shadow: 0 8px 30px var(--shadow);
+            padding: 40px;
+            width: 100%;
+            max-width: 450px;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .login-header h2 {
+            color: var(--text-dark);
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .login-header p {
+            color: var(--text);
+            font-size: 16px;
+        }
+
+        .login-header .domain-note {
+            font-size: 14px;
+            color: var(--warning);
+            background-color: rgba(255, 152, 0, 0.1);
+            padding: 8px 12px;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+
+        .user-type-selector {
+            display: flex;
+            background-color: var(--secondary-light);
+            border-radius: 12px;
+            padding: 5px;
+            margin-bottom: 25px;
+        }
+
+        .user-type-btn {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            background: transparent;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            color: var(--text);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .user-type-btn.active {
+            background-color: var(--white);
+            color: var(--text-dark);
+            box-shadow: 0 4px 8px var(--shadow);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-dark);
+            font-weight: 500;
+        }
+
+        .input-with-icon {
+            position: relative;
+        }
+
+        .input-with-icon input, .input-with-icon select {
+            width: 100%;
+            padding: 14px 16px 14px 45px;
+            border: 2px solid var(--primary-light);
+            border-radius: 12px;
+            font-size: 16px;
+            color: var(--text-dark);
+            transition: all 0.3s ease;
+            background-color: white;
+        }
+
+        .input-with-icon input:focus, .input-with-icon select:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(255, 182, 193, 0.2);
+        }
+
+        .input-with-icon i {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary);
+            z-index: 1;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--text);
+            cursor: pointer;
+            z-index: 2;
+        }
+
+        .error-message {
+            color: var(--danger);
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .show-error .error-message {
+            display: block;
+        }
+
+        .login-btn, .action-btn {
+            width: 100%;
+            padding: 16px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .login-btn:hover, .action-btn:hover {
+            background-color: #ff9eb0;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(255, 182, 193, 0.3);
+        }
+
+        .secondary-btn {
+            background-color: var(--secondary);
+            color: var(--text-dark);
+        }
+
+        .secondary-btn:hover {
+            background-color: #8BC4D9;
+        }
+
+        .create-account-link {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 15px;
+        }
+
+        .create-account-link a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .create-account-link a:hover {
+            text-decoration: underline;
+        }
+
+        /* Dashboard Styles */
+        .dashboard {
+            display: none;
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .dashboard-header h2 {
+            color: var(--text-dark);
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .welcome-msg {
+            font-size: 18px;
+            color: var(--text);
+        }
+
+        .user-name {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .dashboard-actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        .qr-btn {
+            background-color: var(--accent);
+            color: var(--text-dark);
+            border: none;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .qr-btn:hover {
+            background-color: #7EC4B3;
+            transform: translateY(-2px);
+        }
+
+        /* Dashboard Cards Container */
+        .dashboard-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background-color: var(--white);
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 6px 20px var(--shadow);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(149, 157, 165, 0.2);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .card-header h3 {
+            color: var(--text-dark);
+            font-size: 20px;
+        }
+
+        .card-header i {
+            font-size: 24px;
+            color: var(--primary);
+        }
+
+        .card-content {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 10px;
+        }
+
+        .card-footer {
+            font-size: 14px;
+            color: var(--text);
+        }
+
+        .attendance-card {
+            border-top: 5px solid var(--accent);
+        }
+
+        .performance-card {
+            border-top: 5px solid var(--primary);
+        }
+
+        .placement-card {
+            border-top: 5px solid var(--secondary);
+        }
+
+        .deadline-card {
+            border-top: 5px solid #FFD166;
+        }
+
+        .reminder-card {
+            border-top: 5px solid var(--info);
+        }
+
+        /* Reminder Block Styles */
+        .reminder-block {
+            background-color: var(--white);
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 6px 20px var(--shadow);
+            margin-bottom: 40px;
+            border-left: 5px solid var(--info);
+        }
+
+        .reminder-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .reminder-header h3 {
+            color: var(--text-dark);
+            font-size: 22px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .reminder-item {
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .reminder-item.absent {
+            background-color: rgba(244, 67, 54, 0.1);
+            border-left: 4px solid var(--danger);
+        }
+
+        .reminder-item.placement {
+            background-color: rgba(33, 150, 243, 0.1);
+            border-left: 4px solid var(--info);
+        }
+
+        .reminder-item.offer {
+            background-color: rgba(76, 175, 80, 0.1);
+            border-left: 4px solid var(--success);
+        }
+
+        .reminder-icon {
+            font-size: 20px;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background-color: white;
+        }
+
+        .reminder-item.absent .reminder-icon {
+            color: var(--danger);
+            background-color: rgba(244, 67, 54, 0.1);
+        }
+
+        .reminder-item.placement .reminder-icon {
+            color: var(--info);
+            background-color: rgba(33, 150, 243, 0.1);
+        }
+
+        .reminder-item.offer .reminder-icon {
+            color: var(--success);
+            background-color: rgba(76, 175, 80, 0.1);
+        }
+
+        .reminder-content {
+            flex: 1;
+        }
+
+        .reminder-title {
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 5px;
+        }
+
+        .reminder-desc {
+            font-size: 14px;
+            color: var(--text);
+        }
+
+        .reminder-date {
+            font-size: 12px;
+            color: var(--text);
+            opacity: 0.8;
+        }
+
+        /* Content Sections - Initially Hidden */
+        .content-section {
+            display: none;
+            margin-bottom: 40px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-title {
+            font-size: 24px;
+            color: var(--text-dark);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .back-to-dashboard {
+            background-color: var(--secondary);
+            color: var(--text-dark);
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+
+        .back-to-dashboard:hover {
+            background-color: #8BC4D9;
+        }
+
+        /* Profile Section */
+        .profile-section {
+            background-color: var(--white);
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 6px 20px var(--shadow);
+            margin-bottom: 40px;
+        }
+
+        .profile-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .profile-header h3 {
+            color: var(--text-dark);
+            font-size: 24px;
+        }
+
+        .profile-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .profile-item {
+            padding: 15px;
+            background-color: var(--secondary-light);
+            border-radius: 12px;
+        }
+
+        .profile-label {
+            font-size: 14px;
+            color: var(--text);
+            margin-bottom: 5px;
+        }
+
+        .profile-value {
+            font-size: 18px;
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+
+        /* Table Styles */
+        .table-container {
+            background-color: var(--white);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 6px 20px var(--shadow);
+            margin-bottom: 40px;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background-color: var(--primary-light);
+        }
+
+        th {
+            padding: 18px 15px;
+            text-align: left;
+            color: var(--text-dark);
+            font-weight: 600;
+            border-bottom: 2px solid var(--primary);
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid var(--primary-light);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .status-present {
+            color: var(--success);
+            background-color: rgba(76, 175, 80, 0.1);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .status-absent {
+            color: var(--danger);
+            background-color: rgba(244, 67, 54, 0.1);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .status-pending {
+            color: var(--warning);
+            background-color: rgba(255, 152, 0, 0.1);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .status-selected {
+            color: var(--success);
+            background-color: rgba(76, 175, 80, 0.1);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .status-waiting {
+            color: var(--warning);
+            background-color: rgba(255, 152, 0, 0.1);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .update-btn {
+            background-color: var(--accent);
+            color: var(--text-dark);
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .update-btn:hover {
+            background-color: #7EC4B3;
+        }
+
+        .view-btn {
+            background-color: var(--secondary);
+            color: var(--text-dark);
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .view-btn:hover {
+            background-color: #8BC4D9;
+        }
+
+        /* Footer Styles */
+        footer {
+            background-color: var(--white);
+            padding: 30px 0;
+            box-shadow: 0 -4px 12px var(--shadow);
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer-logo i {
+            font-size: 24px;
+            color: var(--primary);
+        }
+
+        .footer-logo h3 {
+            color: var(--text-dark);
+            font-size: 22px;
+        }
+
+        .copyright {
+            color: var(--text);
+            font-size: 14px;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background-color: var(--white);
+            border-radius: 20px;
+            padding: 30px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .modal-header h3 {
+            color: var(--text-dark);
+            font-size: 24px;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--text);
+            cursor: pointer;
+        }
+
+        .modal-form .form-group {
+            margin-bottom: 20px;
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .modal-btn {
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .modal-btn.primary {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+        }
+
+        .modal-btn.secondary {
+            background-color: var(--secondary-light);
+            color: var(--text-dark);
+            border: 2px solid var(--primary-light);
+        }
+
+        /* QR Modal Styles */
+        .qr-modal-content {
+            max-width: 400px;
+            text-align: center;
+        }
+
+        #qr-code-container {
+            margin: 20px 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        #qr-timer {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin: 15px 0;
+        }
+
+        .qr-timer-warning {
+            color: var(--warning);
+        }
+
+        .qr-timer-danger {
+            color: var(--danger);
+        }
+
+        .scanned-students {
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        .scanned-students h4 {
+            margin-bottom: 10px;
+            color: var(--text-dark);
+        }
+
+        #scanned-list {
+            max-height: 150px;
+            overflow-y: auto;
+            background-color: var(--secondary-light);
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .scanned-item {
+            padding: 5px 0;
+            border-bottom: 1px solid var(--primary-light);
+        }
+
+        .scanned-item:last-child {
+            border-bottom: none;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .dashboard-cards {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .nav-links {
+                width: 100%;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+            
+            .login-card {
+                padding: 30px 20px;
+            }
+            
+            .dashboard-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .dashboard-actions {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .section-title {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .dashboard-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .profile-info {
+                grid-template-columns: 1fr;
+            }
+            
+            .modal-content {
+                padding: 20px;
+            }
+            
+            .reminder-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-graduation-cap"></i>
+                    <h1>Edu<span>Tracker</span></h1>
+                </div>
+                <div class="nav-links" id="nav-links">
+                    <!-- Navigation links will be dynamically added after login -->
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="container">
+            <!-- Login Page -->
+            <div id="login-page" class="login-container">
+                <div class="login-card">
+                    <div class="login-header">
+                        <h2>Welcome to EduTracker</h2>
+                        <p>Sign in to access your dashboard</p>
+                        <div class="domain-note">
+                            <i class="fas fa-info-circle"></i> Only @clg.edu.in email addresses are allowed
+                        </div>
+                    </div>
+                    
+                    <!-- Login Form -->
+                    <form id="login-form">
+                        <div class="user-type-selector">
+                            <button class="user-type-btn active" id="student-btn" type="button">Student</button>
+                            <button class="user-type-btn" id="faculty-btn" type="button">Faculty</button>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-envelope"></i>
+                                <input type="email" id="email" placeholder="username@clg.edu.in">
+                            </div>
+                            <div class="error-message" id="email-error">Please enter a valid @clg.edu.in email address</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-lock"></i>
+                                <input type="password" id="password" placeholder="Enter your password">
+                                <button type="button" class="password-toggle" id="show-password">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                            <div class="error-message" id="password-error">Incorrect password. Please try again.</div>
+                        </div>
+                        
+                        <button type="submit" class="login-btn">Sign In</button>
+                        
+                        <div class="create-account-link">
+                            <p>Don't have an account? <a href="#" id="show-create-account">Create Account</a></p>
+                        </div>
+                    </form>
+                    
+                    <!-- Create Account Form (Hidden Initially) -->
+                    <form id="create-account-form" style="display: none;">
+                        <div class="user-type-selector">
+                            <button class="user-type-btn active" id="new-student-btn" type="button">Student</button>
+                            <button class="user-type-btn" id="new-faculty-btn" type="button">Faculty</button>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="new-name">Full Name</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-user"></i>
+                                <input type="text" id="new-name" placeholder="Enter your full name">
+                            </div>
+                            <div class="error-message" id="name-error">Please enter your name</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="new-email">Email Address</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-envelope"></i>
+                                <input type="email" id="new-email" placeholder="username@clg.edu.in">
+                            </div>
+                            <div class="error-message" id="new-email-error">Please enter a valid @clg.edu.in email address</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="new-password">Password</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-lock"></i>
+                                <input type="password" id="new-password" placeholder="Create a password">
+                                <button type="button" class="password-toggle" id="show-new-password">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                            <div class="error-message" id="new-password-error">Password must be at least 6 characters</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="confirm-password">Confirm Password</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-lock"></i>
+                                <input type="password" id="confirm-password" placeholder="Confirm your password">
+                                <button type="button" class="password-toggle" id="show-confirm-password">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                            <div class="error-message" id="confirm-password-error">Passwords do not match</div>
+                        </div>
+                        
+                        <!-- Student Specific Fields -->
+                        <div id="student-fields">
+                            <div class="form-group">
+                                <label for="student-branch">Branch/Department</label>
+                                <div class="input-with-icon">
+                                    <i class="fas fa-building"></i>
+                                    <select id="student-branch">
+                                        <option value="">Select Branch</option>
+                                        <option value="Computer Science">Computer Science</option>
+                                        <option value="Electrical Engineering">Electrical Engineering</option>
+                                        <option value="Mechanical Engineering">Mechanical Engineering</option>
+                                        <option value="Civil Engineering">Civil Engineering</option>
+                                        <option value="Business Administration">Business Administration</option>
+                                    </select>
+                                </div>
+                                <div class="error-message" id="branch-error">Please select a branch</div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="student-id">Student ID (Optional)</label>
+                                <div class="input-with-icon">
+                                    <i class="fas fa-id-card"></i>
+                                    <input type="text" id="student-id" placeholder="Enter your student ID">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Faculty Specific Fields -->
+                        <div id="faculty-fields" style="display: none;">
+                            <div class="form-group">
+                                <label for="faculty-branch">Department</label>
+                                <div class="input-with-icon">
+                                    <i class="fas fa-building"></i>
+                                    <select id="faculty-branch">
+                                        <option value="">Select Department</option>
+                                        <option value="Computer Science">Computer Science</option>
+                                        <option value="Electrical Engineering">Electrical Engineering</option>
+                                        <option value="Mechanical Engineering">Mechanical Engineering</option>
+                                        <option value="Civil Engineering">Civil Engineering</option>
+                                        <option value="Business Administration">Business Administration</option>
+                                    </select>
+                                </div>
+                                <div class="error-message" id="faculty-branch-error">Please select a department</div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="employee-id">Employee ID (Optional)</label>
+                                <div class="input-with-icon">
+                                    <i class="fas fa-id-badge"></i>
+                                    <input type="text" id="employee-id" placeholder="Enter your employee ID">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="login-btn">Create Account</button>
+                        
+                        <div class="create-account-link">
+                            <p>Already have an account? <a href="#" id="show-login">Sign In</a></p>
+                        </div>
+                    </form>
+                    
+                    <div style="text-align: center; margin-top: 20px;">
+                        <p style="font-size: 14px;">Demo Credentials:<br>
+                        Student: student@clg.edu.in / password123<br>
+                        Faculty: faculty@clg.edu.in / password123</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Student Dashboard -->
+            <div id="student-dashboard" class="dashboard">
+                <div class="dashboard-header">
+                    <div>
+                        <h2>Student Dashboard</h2>
+                        <p class="welcome-msg">Welcome back, <span class="user-name" id="student-name">Alex Johnson</span></p>
+                    </div>
+                    <div class="dashboard-actions">
+                        <button class="qr-btn" id="student-scan-qr">
+                            <i class="fas fa-qrcode"></i> Scan QR for Attendance
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Profile Section -->
+                <div class="profile-section">
+                    <div class="profile-header">
+                        <h3>My Profile</h3>
+                        <button class="update-btn" id="edit-student-profile">
+                            <i class="fas fa-edit"></i> Edit Profile
+                        </button>
+                    </div>
+                    <div class="profile-info" id="student-profile-info">
+                        <!-- Profile information will be dynamically loaded -->
+                    </div>
+                </div>
+                
+                <!-- Reminder Block (Students Only) -->
+                <div class="reminder-block" id="student-reminders">
+                    <div class="reminder-header">
+                        <h3><i class="fas fa-bell"></i> Important Reminders</h3>
+                    </div>
+                    <div id="reminders-container">
+                        <!-- Reminders will be dynamically loaded -->
+                    </div>
+                </div>
+                
+                <!-- Dashboard Cards -->
+                <div class="dashboard-cards">
+                    <div class="card attendance-card" id="attendance-block">
+                        <div class="card-header">
+                            <h3>Attendance</h3>
+                            <i class="fas fa-calendar-check"></i>
+                        </div>
+                        <div class="card-content" id="student-attendance">87%</div>
+                        <div class="card-footer">Current semester attendance rate</div>
+                    </div>
+                    
+                    <div class="card performance-card" id="performance-block">
+                        <div class="card-header">
+                            <h3>Performance</h3>
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="card-content" id="student-performance">3.8 GPA</div>
+                        <div class="card-footer">Current cumulative GPA</div>
+                    </div>
+                    
+                    <div class="card placement-card" id="placements-block">
+                        <div class="card-header">
+                            <h3>Placements</h3>
+                            <i class="fas fa-briefcase"></i>
+                        </div>
+                        <div class="card-content" id="student-placements">3 Applied</div>
+                        <div class="card-footer">2 interviews scheduled</div>
+                    </div>
+                    
+                    <div class="card deadline-card">
+                        <div class="card-header">
+                            <h3>Upcoming Deadlines</h3>
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="card-content" id="student-deadlines">2</div>
+                        <div class="card-footer">Next: Project submission (May 15)</div>
+                    </div>
+                </div>
+                
+                <!-- Attendance Section (Hidden Initially) -->
+                <div id="attendance-section" class="content-section">
+                    <h3 class="section-title">
+                        Attendance Records
+                        <button class="back-to-dashboard" id="back-from-attendance">
+                            <i class="fas fa-arrow-left"></i> Back to Dashboard
+                        </button>
+                    </h3>
+                    <div class="table-container">
+                        <table id="student-attendance-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Subject</th>
+                                    <th>Faculty</th>
+                                    <th>Status</th>
+                                    <th>Remarks</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Student attendance data will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- Performance Section (Hidden Initially) -->
+                <div id="performance-section" class="content-section">
+                    <h3 class="section-title">
+                        Performance Records
+                        <button class="back-to-dashboard" id="back-from-performance">
+                            <i class="fas fa-arrow-left"></i> Back to Dashboard
+                        </button>
+                    </h3>
+                    <div class="table-container">
+                        <table id="student-performance-table">
+                            <thead>
+                                <tr>
+                                    <th>Subject</th>
+                                    <th>Mid-Term</th>
+                                    <th>Final Exam</th>
+                                    <th>Assignments</th>
+                                    <th>Total</th>
+                                    <th>Grade</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Student performance data will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- Placements Section (Hidden Initially) -->
+                <div id="placements-section" class="content-section">
+                    <h3 class="section-title">
+                        Placement Opportunities
+                        <button class="back-to-dashboard" id="back-from-placements">
+                            <i class="fas fa-arrow-left"></i> Back to Dashboard
+                        </button>
+                    </h3>
+                    <div class="table-container">
+                        <table id="student-placement-table">
+                            <thead>
+                                <tr>
+                                    <th>Company</th>
+                                    <th>Position</th>
+                                    <th>Deadline</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Student placement data will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Faculty Dashboard -->
+            <div id="faculty-dashboard" class="dashboard">
+                <div class="dashboard-header">
+                    <div>
+                        <h2>Faculty Dashboard</h2>
+                        <p class="welcome-msg">Welcome back, <span class="user-name" id="faculty-name">Dr. Sarah Williams</span></p>
+                    </div>
+                    <div class="dashboard-actions">
+                        <button class="qr-btn" id="generate-qr-btn">
+                            <i class="fas fa-qrcode"></i> Generate QR for Attendance
+                        </button>
+                        <button class="qr-btn secondary-btn" id="manual-attendance-btn">
+                            <i class="fas fa-edit"></i> Manual Attendance
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Profile Section -->
+                <div class="profile-section">
+                    <div class="profile-header">
+                        <h3>Faculty Profile</h3>
+                        <button class="update-btn" id="edit-faculty-profile">
+                            <i class="fas fa-edit"></i> Edit Profile
+                        </button>
+                    </div>
+                    <div class="profile-info" id="faculty-profile-info">
+                        <!-- Faculty profile information will be dynamically loaded -->
+                    </div>
+                </div>
+                
+                <!-- Dashboard Cards -->
+                <div class="dashboard-cards">
+                    <div class="card attendance-card" id="faculty-attendance-block">
+                        <div class="card-header">
+                            <h3>Attendance Management</h3>
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="card-content" id="faculty-students">42</div>
+                        <div class="card-footer">Total students in your branch</div>
+                    </div>
+                    
+                    <div class="card performance-card" id="faculty-performance-block">
+                        <div class="card-header">
+                            <h3>Performance Management</h3>
+                            <i class="fas fa-chart-bar"></i>
+                        </div>
+                        <div class="card-content" id="faculty-performance">85%</div>
+                        <div class="card-footer">Class average this semester</div>
+                    </div>
+                    
+                    <div class="card placement-card" id="faculty-placements-block">
+                        <div class="card-header">
+                            <h3>Placements Management</h3>
+                            <i class="fas fa-user-check"></i>
+                        </div>
+                        <div class="card-content" id="faculty-ready">28</div>
+                        <div class="card-footer">Students placement ready</div>
+                    </div>
+                    
+                    <div class="card deadline-card">
+                        <div class="card-header">
+                            <h3>Attendance Pending</h3>
+                            <i class="fas fa-tasks"></i>
+                        </div>
+                        <div class="card-content" id="faculty-pending">3</div>
+                        <div class="card-footer">Classes need attendance update</div>
+                    </div>
+                </div>
+                
+                <!-- Attendance Management Section (Hidden Initially) -->
+                <div id="faculty-attendance-section" class="content-section">
+                    <h3 class="section-title">
+                        Student Attendance Management
+                        <button class="back-to-dashboard" id="back-from-faculty-attendance">
+                            <i class="fas fa-arrow-left"></i> Back to Dashboard
+                        </button>
+                    </h3>
+                    <div class="table-container">
+                        <table id="faculty-attendance-table">
+                            <thead>
+                                <tr>
+                                    <th>Student ID</th>
+                                    <th>Student Name</th>
+                                    <th>Date</th>
+                                    <th>Subject</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Faculty attendance data will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- Performance Management Section (Hidden Initially) -->
+                <div id="faculty-performance-section" class="content-section">
+                    <h3 class="section-title">
+                        Student Performance Management
+                        <button class="back-to-dashboard" id="back-from-faculty-performance">
+                            <i class="fas fa-arrow-left"></i> Back to Dashboard
+                        </button>
+                    </h3>
+                    <div class="table-container">
+                        <table id="faculty-performance-table">
+                            <thead>
+                                <tr>
+                                    <th>Student ID</th>
+                                    <th>Student Name</th>
+                                    <th>Subject</th>
+                                    <th>Mid-Term</th>
+                                    <th>Final Exam</th>
+                                    <th>Update</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Faculty performance data will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- Placement Management Section (Hidden Initially) -->
+                <div id="faculty-placements-section" class="content-section">
+                    <h3 class="section-title">
+                        Placement Opportunities Management
+                        <button class="back-to-dashboard" id="back-from-faculty-placements">
+                            <i class="fas fa-arrow-left"></i> Back to Dashboard
+                        </button>
+                    </h3>
+                    <div class="table-container">
+                        <table id="faculty-placements-table">
+                            <thead>
+                                <tr>
+                                    <th>Company</th>
+                                    <th>Position</th>
+                                    <th>Deadline</th>
+                                    <th>Eligible Students</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Faculty placements data will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <i class="fas fa-graduation-cap"></i>
+                    <h3>EduTracker</h3>
+                </div>
+                <p class="copyright">© 2023 EduTracker - College Management Platform. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Edit Profile Modal -->
+    <div id="edit-profile-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Edit Profile</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <form id="edit-profile-form" class="modal-form">
+                <input type="hidden" id="edit-profile-id">
+                <input type="hidden" id="edit-profile-type">
+                
+                <div class="form-group">
+                    <label for="edit-name">Full Name</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="edit-name" placeholder="Enter full name" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="edit-email">Email Address</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="edit-email" placeholder="username@clg.edu.in" required>
+                    </div>
+                </div>
+                
+                <div class="form-group" id="edit-branch-group">
+                    <label for="edit-branch">Branch/Department</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-building"></i>
+                        <select id="edit-branch" required>
+                            <option value="">Select Branch</option>
+                            <option value="Computer Science">Computer Science</option>
+                            <option value="Electrical Engineering">Electrical Engineering</option>
+                            <option value="Mechanical Engineering">Mechanical Engineering</option>
+                            <option value="Civil Engineering">Civil Engineering</option>
+                            <option value="Business Administration">Business Administration</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group" id="edit-faculty-assign-group" style="display: none;">
+                    <label for="edit-assigned-faculty">Assigned Faculty</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                        <select id="edit-assigned-faculty">
+                            <option value="">Select Faculty</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="modal-actions">
+                    <button type="button" class="modal-btn secondary close-modal">Cancel</button>
+                    <button type="submit" class="modal-btn primary">Update Profile</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- QR Code Modal -->
+    <div id="qr-modal" class="modal">
+        <div class="modal-content qr-modal-content">
+            <div class="modal-header">
+                <h3 id="qr-modal-title">QR Attendance</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div id="qr-code-container"></div>
+            <div id="qr-timer">QR expires in: <span id="qr-time-left">15</span> seconds</div>
+            <div id="scanned-students" class="scanned-students" style="display: none;">
+                <h4>Scanned Students:</h4>
+                <div id="scanned-list"></div>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="modal-btn primary close-modal" id="close-qr-modal">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Update Attendance Modal -->
+    <div id="attendance-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Update Attendance</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <form id="attendance-form" class="modal-form">
+                <div class="form-group">
+                    <label for="student-select">Select Student</label>
+                    <select id="student-select" class="input-with-icon" style="padding: 14px 16px; width: 100%; border-radius: 12px; border: 2px solid var(--primary-light);">
+                        <!-- Options will be populated dynamically -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="attendance-date">Date</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-calendar"></i>
+                        <input type="date" id="attendance-date" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="attendance-subject">Subject</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-book"></i>
+                        <input type="text" id="attendance-subject" placeholder="Enter subject name" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="attendance-status">Attendance Status</label>
+                    <select id="attendance-status" class="input-with-icon" style="padding: 14px 16px; width: 100%; border-radius: 12px; border: 2px solid var(--primary-light);">
+                        <option value="present">Present</option>
+                        <option value="absent">Absent</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="attendance-remarks">Remarks (Optional)</label>
+                    <textarea id="attendance-remarks" rows="3" placeholder="Enter remarks if any" style="width: 100%; padding: 14px 16px; border-radius: 12px; border: 2px solid var(--primary-light);"></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="modal-btn secondary close-modal">Cancel</button>
+                    <button type="submit" class="modal-btn primary">Update Attendance</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Update Performance Modal -->
+    <div id="performance-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Update Performance</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <form id="performance-form" class="modal-form">
+                <div class="form-group">
+                    <label for="performance-student">Select Student</label>
+                    <select id="performance-student" class="input-with-icon" style="padding: 14px 16px; width: 100%; border-radius: 12px; border: 2px solid var(--primary-light);" required>
+                        <!-- Options will be populated dynamically -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="performance-subject">Subject</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-book"></i>
+                        <input type="text" id="performance-subject" placeholder="Enter subject name" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="midterm-marks">Mid-Term Marks (out of 30)</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-percentage"></i>
+                        <input type="number" id="midterm-marks" min="0" max="30" step="0.5" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="final-marks">Final Exam Marks (out of 50)</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-percentage"></i>
+                        <input type="number" id="final-marks" min="0" max="50" step="0.5" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="assignment-marks">Assignment Marks (out of 20)</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-percentage"></i>
+                        <input type="number" id="assignment-marks" min="0" max="20" step="0.5" required>
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="modal-btn secondary close-modal">Cancel</button>
+                    <button type="submit" class="modal-btn primary">Update Performance</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Placement Modal -->
+    <div id="placement-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add Placement Opportunity</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <form id="placement-form" class="modal-form">
+                <div class="form-group">
+                    <label for="placement-company">Company Name</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-building"></i>
+                        <input type="text" id="placement-company" placeholder="Enter company name" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="placement-position">Position</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-briefcase"></i>
+                        <input type="text" id="placement-position" placeholder="Enter position" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="placement-deadline">Application Deadline</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-calendar"></i>
+                        <input type="date" id="placement-deadline" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="placement-description">Description</label>
+                    <textarea id="placement-description" rows="3" placeholder="Enter job description" style="width: 100%; padding: 14px 16px; border-radius: 12px; border: 2px solid var(--primary-light);"></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="modal-btn secondary close-modal">Cancel</button>
+                    <button type="submit" class="modal-btn primary">Add Opportunity</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Student Scan QR Modal -->
+    <div id="student-scan-modal" class="modal">
+        <div class="modal-content qr-modal-content">
+            <div class="modal-header">
+                <h3>Scan QR Code for Attendance</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div id="student-scan-container">
+                <p>Please ask your faculty to generate a QR code for attendance.</p>
+                <p>Once the QR code is displayed, scan it with your device camera to mark your attendance.</p>
+                <div style="margin: 20px 0; padding: 20px; background-color: var(--accent-light); border-radius: 10px;">
+                    <p><i class="fas fa-info-circle"></i> <strong>Note:</strong> QR codes are valid for 15 seconds only.</p>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="modal-btn primary close-modal">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data storage using localStorage for persistence
+        class EduTrackerData {
+            constructor() {
+                this.initStorage();
+            }
+
+            initStorage() {
+                if (!localStorage.getItem('edutracker_students')) {
+                    const defaultStudents = [
+                        { 
+                            id: 'S001', 
+                            name: 'Alex Johnson', 
+                            email: 'student@clg.edu.in', 
+                            password: 'password123', 
+                            branch: 'Computer Science', 
+                            faculty: 'Dr. Sarah Williams',
+                            enrollmentYear: 2021,
+                            phone: '+1 234-567-8900',
+                            address: '123 College Ave, Campus City'
+                        },
+                        { 
+                            id: 'S002', 
+                            name: 'Maria Garcia', 
+                            email: 'maria@clg.edu.in', 
+                            password: 'password123', 
+                            branch: 'Computer Science', 
+                            faculty: 'Dr. Sarah Williams',
+                            enrollmentYear: 2022,
+                            phone: '+1 234-567-8901',
+                            address: '124 College Ave, Campus City'
+                        }
+                    ];
+                    localStorage.setItem('edutracker_students', JSON.stringify(defaultStudents));
+                }
+
+                if (!localStorage.getItem('edutracker_faculty')) {
+                    const defaultFaculty = [
+                        { 
+                            id: 'F001', 
+                            name: 'Dr. Sarah Williams', 
+                            email: 'faculty@clg.edu.in', 
+                            password: 'password123', 
+                            branch: 'Computer Science',
+                            employeeId: 'FAC001',
+                            designation: 'Professor',
+                            department: 'Computer Science',
+                            phone: '+1 234-567-8910'
+                        },
+                        { 
+                            id: 'F002', 
+                            name: 'Prof. Robert Chen', 
+                            email: 'robert@clg.edu.in', 
+                            password: 'password123', 
+                            branch: 'Electrical Engineering',
+                            employeeId: 'FAC002',
+                            designation: 'Associate Professor',
+                            department: 'Electrical Engineering',
+                            phone: '+1 234-567-8911'
+                        }
+                    ];
+                    localStorage.setItem('edutracker_faculty', JSON.stringify(defaultFaculty));
+                }
+
+                if (!localStorage.getItem('edutracker_attendance')) {
+                    const defaultAttendance = [
+                        { 
+                            id: 'ATT001', 
+                            studentId: 'S001', 
+                            studentName: 'Alex Johnson', 
+                            date: '2023-10-10', 
+                            subject: 'Data Structures', 
+                            status: 'present', 
+                            remarks: '', 
+                            faculty: 'Dr. Sarah Williams',
+                            qrSessionId: null
+                        },
+                        { 
+                            id: 'ATT002', 
+                            studentId: 'S001', 
+                            studentName: 'Alex Johnson', 
+                            date: '2023-10-12', 
+                            subject: 'Algorithms', 
+                            status: 'present', 
+                            remarks: '', 
+                            faculty: 'Dr. Sarah Williams',
+                            qrSessionId: null
+                        },
+                        { 
+                            id: 'ATT003', 
+                            studentId: 'S001', 
+                            studentName: 'Alex Johnson', 
+                            date: '2023-10-15', 
+                            subject: 'Database Systems', 
+                            status: 'absent', 
+                            remarks: 'Medical leave', 
+                            faculty: 'Dr. Sarah Williams',
+                            qrSessionId: null
+                        }
+                    ];
+                    localStorage.setItem('edutracker_attendance', JSON.stringify(defaultAttendance));
+                }
+
+                if (!localStorage.getItem('edutracker_performance')) {
+                    const defaultPerformance = [
+                        { 
+                            id: 'PERF001', 
+                            studentId: 'S001', 
+                            studentName: 'Alex Johnson', 
+                            subject: 'Data Structures', 
+                            midTerm: 28, 
+                            finalExam: 45, 
+                            assignments: 18, 
+                            total: 91,
+                            grade: 'A',
+                            faculty: 'Dr. Sarah Williams'
+                        },
+                        { 
+                            id: 'PERF002', 
+                            studentId: 'S001', 
+                            studentName: 'Alex Johnson', 
+                            subject: 'Algorithms', 
+                            midTerm: 26, 
+                            finalExam: 42, 
+                            assignments: 17, 
+                            total: 85,
+                            grade: 'B',
+                            faculty: 'Dr. Sarah Williams'
+                        }
+                    ];
+                    localStorage.setItem('edutracker_performance', JSON.stringify(defaultPerformance));
+                }
+
+                if (!localStorage.getItem('edutracker_placements')) {
+                    const defaultPlacements = [
+                        { 
+                            id: 'PLAC001', 
+                            company: 'Google', 
+                            position: 'Software Engineer', 
+                            deadline: '2023-11-15', 
+                            description: 'Develop scalable web applications',
+                            status: 'open',
+                            postedBy: 'F001'
+                        },
+                        { 
+                            id: 'PLAC002', 
+                            company: 'Microsoft', 
+                            position: 'Data Analyst', 
+                            deadline: '2023-11-20', 
+                            description: 'Analyze business data and generate insights',
+                            status: 'open',
+                            postedBy: 'F001'
+                        },
+                        { 
+                            id: 'PLAC003', 
+                            company: 'Amazon', 
+                            position: 'Cloud Solutions Architect', 
+                            deadline: '2023-11-25', 
+                            description: 'Design and implement cloud infrastructure',
+                            status: 'open',
+                            postedBy: 'F001'
+                        },
+                        { 
+                            id: 'PLAC004', 
+                            company: 'Infosys', 
+                            position: 'Software Developer', 
+                            deadline: '2023-11-30', 
+                            description: 'Full-stack web development',
+                            status: 'open',
+                            postedBy: 'F001'
+                        },
+                        { 
+                            id: 'PLAC005', 
+                            company: 'TCS', 
+                            position: 'Business Analyst', 
+                            deadline: '2023-12-05', 
+                            description: 'Analyze business requirements and processes',
+                            status: 'open',
+                            postedBy: 'F001'
+                        }
+                    ];
+                    localStorage.setItem('edutracker_placements', JSON.stringify(defaultPlacements));
+                }
+
+                if (!localStorage.getItem('edutracker_applications')) {
+                    const defaultApplications = [
+                        { 
+                            id: 'APP001', 
+                            studentId: 'S001', 
+                            placementId: 'PLAC001', 
+                            status: 'Selected', 
+                            appliedDate: '2023-10-05',
+                            interviewDate: '2023-10-25'
+                        },
+                        { 
+                            id: 'APP002', 
+                            studentId: 'S001', 
+                            placementId: 'PLAC002', 
+                            status: 'Waiting List', 
+                            appliedDate: '2023-10-10',
+                            interviewDate: '2023-10-30'
+                        },
+                        { 
+                            id: 'APP003', 
+                            studentId: 'S001', 
+                            placementId: 'PLAC003', 
+                            status: 'Applied', 
+                            appliedDate: '2023-10-15'
+                        }
+                    ];
+                    localStorage.setItem('edutracker_applications', JSON.stringify(defaultApplications));
+                }
+
+                if (!localStorage.getItem('edutracker_reminders')) {
+                    const defaultReminders = [
+                        { 
+                            id: 'REM001', 
+                            studentId: 'S001', 
+                            type: 'absent',
+                            title: 'Attendance Alert',
+                            description: 'You were absent for Database Systems class on Oct 15',
+                            date: '2023-10-16',
+                            read: false
+                        },
+                        { 
+                            id: 'REM002', 
+                            studentId: 'S001', 
+                            type: 'placement',
+                            title: 'Placement Update',
+                            description: 'You have been selected for Software Engineer position at Google',
+                            date: '2023-10-26',
+                            read: false
+                        },
+                        { 
+                            id: 'REM003', 
+                            studentId: 'S001', 
+                            type: 'placement',
+                            title: 'Placement Status',
+                            description: 'You are on waiting list for Data Analyst position at Microsoft',
+                            date: '2023-10-31',
+                            read: false
+                        },
+                        { 
+                            id: 'REM004', 
+                            studentId: 'S001', 
+                            type: 'offer',
+                            title: 'New Internship Opportunity',
+                            description: 'Amazon is hiring Cloud Solutions Architect interns',
+                            date: '2023-11-01',
+                            read: false
+                        },
+                        { 
+                            id: 'REM005', 
+                            studentId: 'S001', 
+                            type: 'offer',
+                            title: 'New Placement Drive',
+                            description: 'Infosys campus recruitment for Software Developers',
+                            date: '2023-11-05',
+                            read: false
+                        }
+                    ];
+                    localStorage.setItem('edutracker_reminders', JSON.stringify(defaultReminders));
+                }
+
+                if (!localStorage.getItem('edutracker_qr_sessions')) {
+                    localStorage.setItem('edutracker_qr_sessions', JSON.stringify([]));
+                }
+            }
+
+            // Student methods
+            getStudents() {
+                return JSON.parse(localStorage.getItem('edutracker_students')) || [];
+            }
+
+            getStudentById(id) {
+                const students = this.getStudents();
+                return students.find(s => s.id === id);
+            }
+
+            getStudentByEmail(email) {
+                const students = this.getStudents();
+                return students.find(s => s.email === email);
+            }
+
+            addStudent(student) {
+                const students = this.getStudents();
+                // Check if email already exists
+                if (students.find(s => s.email === student.email)) {
+                    return { success: false, message: 'Email already registered' };
+                }
+                
+                // Check email domain
+                if (!student.email.endsWith('@clg.edu.in')) {
+                    return { success: false, message: 'Only @clg.edu.in emails allowed' };
+                }
+                
+                // Generate ID if not provided
+                if (!student.id) {
+                    const lastId = students.length > 0 ? 
+                        parseInt(students[students.length - 1].id.substring(1)) : 0;
+                    student.id = 'S' + (lastId + 1).toString().padStart(3, '0');
+                }
+                
+                // Assign to a faculty if not assigned
+                if (!student.faculty) {
+                    const faculty = this.getFaculty().find(f => f.branch === student.branch);
+                    if (faculty) {
+                        student.faculty = faculty.name;
+                    } else {
+                        student.faculty = 'Not Assigned';
+                    }
+                }
+                
+                students.push(student);
+                localStorage.setItem('edutracker_students', JSON.stringify(students));
+                return { success: true, data: student };
+            }
+
+            updateStudent(id, updatedData) {
+                const students = this.getStudents();
+                const index = students.findIndex(s => s.id === id);
+                if (index !== -1) {
+                    students[index] = { ...students[index], ...updatedData };
+                    localStorage.setItem('edutracker_students', JSON.stringify(students));
+                    return true;
+                }
+                return false;
+            }
+
+            // Faculty methods
+            getFaculty() {
+                return JSON.parse(localStorage.getItem('edutracker_faculty')) || [];
+            }
+
+            getFacultyById(id) {
+                const faculty = this.getFaculty();
+                return faculty.find(f => f.id === id);
+            }
+
+            getFacultyByEmail(email) {
+                const faculty = this.getFaculty();
+                return faculty.find(f => f.email === email);
+            }
+
+            addFaculty(facultyMember) {
+                const faculty = this.getFaculty();
+                // Check if email already exists
+                if (faculty.find(f => f.email === facultyMember.email)) {
+                    return { success: false, message: 'Email already registered' };
+                }
+                
+                // Check email domain
+                if (!facultyMember.email.endsWith('@clg.edu.in')) {
+                    return { success: false, message: 'Only @clg.edu.in emails allowed' };
+                }
+                
+                // Generate ID if not provided
+                if (!facultyMember.id) {
+                    const lastId = faculty.length > 0 ? 
+                        parseInt(faculty[faculty.length - 1].id.substring(1)) : 0;
+                    facultyMember.id = 'F' + (lastId + 1).toString().padStart(3, '0');
+                }
+                
+                faculty.push(facultyMember);
+                localStorage.setItem('edutracker_faculty', JSON.stringify(faculty));
+                return { success: true, data: facultyMember };
+            }
+
+            updateFaculty(id, updatedData) {
+                const faculty = this.getFaculty();
+                const index = faculty.findIndex(f => f.id === id);
+                if (index !== -1) {
+                    faculty[index] = { ...faculty[index], ...updatedData };
+                    localStorage.setItem('edutracker_faculty', JSON.stringify(faculty));
+                    return true;
+                }
+                return false;
+            }
+
+            // Attendance methods
+            getAttendance() {
+                return JSON.parse(localStorage.getItem('edutracker_attendance')) || [];
+            }
+
+            getAttendanceByStudent(studentId) {
+                const attendance = this.getAttendance();
+                return attendance.filter(a => a.studentId === studentId);
+            }
+
+            getAttendanceByFaculty(facultyName) {
+                const attendance = this.getAttendance();
+                return attendance.filter(a => a.faculty === facultyName);
+            }
+
+            addAttendance(record) {
+                const attendance = this.getAttendance();
+                // Generate ID if not provided
+                if (!record.id) {
+                    const lastId = attendance.length > 0 ? 
+                        parseInt(attendance[attendance.length - 1].id.substring(3)) : 0;
+                    record.id = 'ATT' + (lastId + 1).toString().padStart(3, '0');
+                }
+                attendance.push(record);
+                localStorage.setItem('edutracker_attendance', JSON.stringify(attendance));
+                return record;
+            }
+
+            updateAttendance(id, updatedData) {
+                const attendance = this.getAttendance();
+                const index = attendance.findIndex(a => a.id === id);
+                if (index !== -1) {
+                    attendance[index] = { ...attendance[index], ...updatedData };
+                    localStorage.setItem('edutracker_attendance', JSON.stringify(attendance));
+                    return true;
+                }
+                return false;
+            }
+
+            // Performance methods
+            getPerformance() {
+                return JSON.parse(localStorage.getItem('edutracker_performance')) || [];
+            }
+
+            getPerformanceByStudent(studentId) {
+                const performance = this.getPerformance();
+                return performance.filter(p => p.studentId === studentId);
+            }
+
+            addPerformance(record) {
+                const performance = this.getPerformance();
+                // Generate ID if not provided
+                if (!record.id) {
+                    const lastId = performance.length > 0 ? 
+                        parseInt(performance[performance.length - 1].id.substring(4)) : 0;
+                    record.id = 'PERF' + (lastId + 1).toString().padStart(3, '0');
+                }
+                performance.push(record);
+                localStorage.setItem('edutracker_performance', JSON.stringify(performance));
+                return record;
+            }
+
+            // Placement methods
+            getPlacements() {
+                return JSON.parse(localStorage.getItem('edutracker_placements')) || [];
+            }
+
+            addPlacement(placement) {
+                const placements = this.getPlacements();
+                // Generate ID if not provided
+                if (!placement.id) {
+                    const lastId = placements.length > 0 ? 
+                        parseInt(placements[placements.length - 1].id.substring(4)) : 0;
+                    placement.id = 'PLAC' + (lastId + 1).toString().padStart(3, '0');
+                }
+                placements.push(placement);
+                localStorage.setItem('edutracker_placements', JSON.stringify(placements));
+                return placement;
+            }
+
+            // Application methods
+            getApplications() {
+                return JSON.parse(localStorage.getItem('edutracker_applications')) || [];
+            }
+
+            getApplicationsByStudent(studentId) {
+                const applications = this.getApplications();
+                return applications.filter(a => a.studentId === studentId);
+            }
+
+            addApplication(application) {
+                const applications = this.getApplications();
+                // Generate ID if not provided
+                if (!application.id) {
+                    const lastId = applications.length > 0 ? 
+                        parseInt(applications[applications.length - 1].id.substring(3)) : 0;
+                    application.id = 'APP' + (lastId + 1).toString().padStart(3, '0');
+                }
+                applications.push(application);
+                localStorage.setItem('edutracker_applications', JSON.stringify(applications));
+                return application;
+            }
+
+            // Reminder methods
+            getReminders() {
+                return JSON.parse(localStorage.getItem('edutracker_reminders')) || [];
+            }
+
+            getRemindersByStudent(studentId) {
+                const reminders = this.getReminders();
+                return reminders.filter(r => r.studentId === studentId);
+            }
+
+            addReminder(reminder) {
+                const reminders = this.getReminders();
+                // Generate ID if not provided
+                if (!reminder.id) {
+                    const lastId = reminders.length > 0 ? 
+                        parseInt(reminders[reminders.length - 1].id.substring(3)) : 0;
+                    reminder.id = 'REM' + (lastId + 1).toString().padStart(3, '0');
+                }
+                reminders.push(reminder);
+                localStorage.setItem('edutracker_reminders', JSON.stringify(reminders));
+                return reminder;
+            }
+
+            markReminderAsRead(reminderId) {
+                const reminders = this.getReminders();
+                const index = reminders.findIndex(r => r.id === reminderId);
+                if (index !== -1) {
+                    reminders[index].read = true;
+                    localStorage.setItem('edutracker_reminders', JSON.stringify(reminders));
+                    return true;
+                }
+                return false;
+            }
+
+            // QR Session methods
+            getQRSessions() {
+                return JSON.parse(localStorage.getItem('edutracker_qr_sessions')) || [];
+            }
+
+            addQRSession(session) {
+                const sessions = this.getQRSessions();
+                sessions.push(session);
+                localStorage.setItem('edutracker_qr_sessions', JSON.stringify(sessions));
+                return session;
+            }
+
+            updateQRSession(sessionId, updatedData) {
+                const sessions = this.getQRSessions();
+                const index = sessions.findIndex(s => s.id === sessionId);
+                if (index !== -1) {
+                    sessions[index] = { ...sessions[index], ...updatedData };
+                    localStorage.setItem('edutracker_qr_sessions', JSON.stringify(sessions));
+                    return true;
+                }
+                return false;
+            }
+
+            getActiveQRSession() {
+                const sessions = this.getQRSessions();
+                const now = new Date().toISOString();
+                return sessions.find(s => s.expiresAt > now && s.isActive);
+            }
+        }
+
+        // Initialize data manager
+        const dataManager = new EduTrackerData();
+
+        // Current user and state
+        let currentUser = null;
+        let isFaculty = false;
+        let currentQRCode = null;
+        let qrTimer = null;
+        let qrSessionId = null;
+        let scannedStudents = [];
+        let isCreatingAccount = false;
+
+        // DOM Elements
+        const loginPage = document.getElementById('login-page');
+        const studentDashboard = document.getElementById('student-dashboard');
+        const facultyDashboard = document.getElementById('faculty-dashboard');
+        const loginForm = document.getElementById('login-form');
+        const createAccountForm = document.getElementById('create-account-form');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const showPasswordBtn = document.getElementById('show-password');
+        const studentBtn = document.getElementById('student-btn');
+        const facultyBtn = document.getElementById('faculty-btn');
+        const newStudentBtn = document.getElementById('new-student-btn');
+        const newFacultyBtn = document.getElementById('new-faculty-btn');
+        const navLinks = document.getElementById('nav-links');
+        const showCreateAccountLink = document.getElementById('show-create-account');
+        const showLoginLink = document.getElementById('show-login');
+        
+        // Modals
+        const editProfileModal = document.getElementById('edit-profile-modal');
+        const qrModal = document.getElementById('qr-modal');
+        const attendanceModal = document.getElementById('attendance-modal');
+        const performanceModal = document.getElementById('performance-modal');
+        const placementModal = document.getElementById('placement-modal');
+        const studentScanModal = document.getElementById('student-scan-modal');
+        
+        // Close modal buttons
+        const closeModalBtns = document.querySelectorAll('.close-modal');
+        
+        // Forms
+        const editProfileForm = document.getElementById('edit-profile-form');
+        const attendanceForm = document.getElementById('attendance-form');
+        const performanceForm = document.getElementById('performance-form');
+        const placementForm = document.getElementById('placement-form');
+        
+        // Buttons
+        const generateQRBtn = document.getElementById('generate-qr-btn');
+        const manualAttendanceBtn = document.getElementById('manual-attendance-btn');
+        const studentScanQRBtn = document.getElementById('student-scan-qr');
+        const editStudentProfileBtn = document.getElementById('edit-student-profile');
+        const editFacultyProfileBtn = document.getElementById('edit-faculty-profile');
+        
+        // Content Sections
+        const contentSections = document.querySelectorAll('.content-section');
+        
+        // Back to dashboard buttons
+        const backFromAttendanceBtn = document.getElementById('back-from-attendance');
+        const backFromPerformanceBtn = document.getElementById('back-from-performance');
+        const backFromPlacementsBtn = document.getElementById('back-from-placements');
+        const backFromFacultyAttendanceBtn = document.getElementById('back-from-faculty-attendance');
+        const backFromFacultyPerformanceBtn = document.getElementById('back-from-faculty-performance');
+        const backFromFacultyPlacementsBtn = document.getElementById('back-from-faculty-placements');
+
+        // Initialize the application
+        function initApp() {
+            // Set default view to login
+            showLoginPage();
+            
+            // Add event listeners
+            loginForm.addEventListener('submit', handleLogin);
+            createAccountForm.addEventListener('submit', handleCreateAccount);
+            showPasswordBtn.addEventListener('click', togglePasswordVisibility);
+            studentBtn.addEventListener('click', () => switchUserType('student'));
+            facultyBtn.addEventListener('click', () => switchUserType('faculty'));
+            newStudentBtn.addEventListener('click', () => switchNewUserType('student'));
+            newFacultyBtn.addEventListener('click', () => switchNewUserType('faculty'));
+            
+            // Show/hide create account form
+            showCreateAccountLink.addEventListener('click', showCreateAccount);
+            showLoginLink.addEventListener('click', showLogin);
+            
+            // Modal close buttons
+            closeModalBtns.forEach(btn => {
+                btn.addEventListener('click', closeAllModals);
+            });
+            
+            // Form submissions
+            editProfileForm.addEventListener('submit', handleEditProfile);
+            attendanceForm.addEventListener('submit', handleAttendanceUpdate);
+            performanceForm.addEventListener('submit', handlePerformanceUpdate);
+            placementForm.addEventListener('submit', handlePlacementAdd);
+            
+            // Button clicks
+            generateQRBtn.addEventListener('click', generateQRCode);
+            manualAttendanceBtn.addEventListener('click', showAttendanceModal);
+            studentScanQRBtn.addEventListener('click', showStudentScanModal);
+            editStudentProfileBtn.addEventListener('click', () => showEditProfileModal('student'));
+            editFacultyProfileBtn.addEventListener('click', () => showEditProfileModal('faculty'));
+            
+            // Back to dashboard buttons
+            backFromAttendanceBtn.addEventListener('click', showDashboardView);
+            backFromPerformanceBtn.addEventListener('click', showDashboardView);
+            backFromPlacementsBtn.addEventListener('click', showDashboardView);
+            backFromFacultyAttendanceBtn.addEventListener('click', showDashboardView);
+            backFromFacultyPerformanceBtn.addEventListener('click', showDashboardView);
+            backFromFacultyPlacementsBtn.addEventListener('click', showDashboardView);
+            
+            // Password toggle for create account form
+            document.getElementById('show-new-password').addEventListener('click', () => toggleNewPasswordVisibility('new-password'));
+            document.getElementById('show-confirm-password').addEventListener('click', () => toggleNewPasswordVisibility('confirm-password'));
+            
+            // Close modals when clicking outside
+            window.addEventListener('click', (e) => {
+                if (e.target.classList.contains('modal')) {
+                    closeAllModals();
+                }
+            });
+            
+            // Set today's date as default in forms
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('attendance-date').value = today;
+            document.getElementById('placement-deadline').value = today;
+            
+            // Check for active QR session on load
+            checkActiveQRSession();
+        }
+
+        // Show login page
+        function showLoginPage() {
+            loginPage.style.display = 'flex';
+            studentDashboard.style.display = 'none';
+            facultyDashboard.style.display = 'none';
+            
+            // Reset navigation
+            navLinks.innerHTML = '';
+            
+            // Reset forms
+            loginForm.reset();
+            createAccountForm.reset();
+            clearErrors();
+            
+            // Show login form by default
+            loginForm.style.display = 'block';
+            createAccountForm.style.display = 'none';
+            isCreatingAccount = false;
+        }
+
+        // Show create account form
+        function showCreateAccount(e) {
+            e.preventDefault();
+            loginForm.style.display = 'none';
+            createAccountForm.style.display = 'block';
+            isCreatingAccount = true;
+            clearErrors();
+            
+            // Reset form
+            createAccountForm.reset();
+            switchNewUserType('student');
+        }
+
+        // Show login form
+        function showLogin(e) {
+            e.preventDefault();
+            loginForm.style.display = 'block';
+            createAccountForm.style.display = 'none';
+            isCreatingAccount = false;
+            clearErrors();
+        }
+
+        // Update navigation after login
+        function updateNavigation() {
+            navLinks.innerHTML = '';
+            
+            if (isFaculty) {
+                // Faculty navigation
+                const logoutLink = document.createElement('a');
+                logoutLink.href = '#';
+                logoutLink.id = 'logout-link';
+                logoutLink.textContent = 'Logout';
+                logoutLink.addEventListener('click', handleLogout);
+                
+                navLinks.appendChild(logoutLink);
+            } else {
+                // Student navigation
+                const logoutLink = document.createElement('a');
+                logoutLink.href = '#';
+                logoutLink.id = 'logout-link';
+                logoutLink.textContent = 'Logout';
+                logoutLink.addEventListener('click', handleLogout);
+                
+                navLinks.appendChild(logoutLink);
+            }
+        }
+
+        // Switch between student and faculty login
+        function switchUserType(type) {
+            if (type === 'student') {
+                studentBtn.classList.add('active');
+                facultyBtn.classList.remove('active');
+                emailInput.placeholder = "username@clg.edu.in";
+            } else {
+                facultyBtn.classList.add('active');
+                studentBtn.classList.remove('active');
+                emailInput.placeholder = "username@clg.edu.in";
+            }
+        }
+
+        // Switch between student and faculty in create account form
+        function switchNewUserType(type) {
+            if (type === 'student') {
+                newStudentBtn.classList.add('active');
+                newFacultyBtn.classList.remove('active');
+                document.getElementById('student-fields').style.display = 'block';
+                document.getElementById('faculty-fields').style.display = 'none';
+            } else {
+                newFacultyBtn.classList.add('active');
+                newStudentBtn.classList.remove('active');
+                document.getElementById('student-fields').style.display = 'none';
+                document.getElementById('faculty-fields').style.display = 'block';
+            }
+        }
+
+        // Validate email domain
+        function validateEmailDomain(email) {
+            return email.endsWith('@clg.edu.in');
+        }
+
+        // Toggle password visibility for login form
+        function togglePasswordVisibility() {
+            const eyeIcon = showPasswordBtn.querySelector('i');
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                eyeIcon.classList.remove('fa-eye');
+                eyeIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                eyeIcon.classList.remove('fa-eye-slash');
+                eyeIcon.classList.add('fa-eye');
+            }
+        }
+
+        // Toggle password visibility for create account form
+        function toggleNewPasswordVisibility(fieldId) {
+            const field = document.getElementById(fieldId);
+            const eyeIcon = document.getElementById(`show-${fieldId}`).querySelector('i');
+            if (field.type === 'password') {
+                field.type = 'text';
+                eyeIcon.classList.remove('fa-eye');
+                eyeIcon.classList.add('fa-eye-slash');
+            } else {
+                field.type = 'password';
+                eyeIcon.classList.remove('fa-eye-slash');
+                eyeIcon.classList.add('fa-eye');
+            }
+        }
+
+        // Handle login form submission
+        function handleLogin(e) {
+            e.preventDefault();
+            clearErrors();
+            
+            const email = emailInput.value.trim();
+            const password = passwordInput.value.trim();
+            const isFacultyLogin = facultyBtn.classList.contains('active');
+            
+            // Validate email domain
+            if (!validateEmailDomain(email)) {
+                document.getElementById('email-error').textContent = 'Only @clg.edu.in email addresses are allowed';
+                emailInput.parentElement.parentElement.classList.add('show-error');
+                return;
+            }
+            
+            let validLogin = false;
+            let userFound = false;
+            
+            if (isFacultyLogin) {
+                // Check faculty credentials
+                const faculty = dataManager.getFacultyByEmail(email);
+                if (faculty) {
+                    userFound = true;
+                    if (faculty.password === password) {
+                        validLogin = true;
+                        currentUser = faculty;
+                        isFaculty = true;
+                        showFacultyDashboard();
+                    }
+                }
+            } else {
+                // Check student credentials
+                const student = dataManager.getStudentByEmail(email);
+                if (student) {
+                    userFound = true;
+                    if (student.password === password) {
+                        validLogin = true;
+                        currentUser = student;
+                        isFaculty = false;
+                        showStudentDashboard();
+                    }
+                }
+            }
+            
+            if (!validLogin) {
+                // Show error messages
+                if (!userFound) {
+                    document.getElementById('email-error').textContent = 'Invalid user. Only registered @clg.edu.in users can login';
+                    emailInput.parentElement.parentElement.classList.add('show-error');
+                } else {
+                    document.getElementById('password-error').textContent = 'Incorrect password. Please try again.';
+                    passwordInput.parentElement.parentElement.classList.add('show-error');
+                }
+            }
+        }
+
+        // Handle create account form submission
+        function handleCreateAccount(e) {
+            e.preventDefault();
+            clearErrors();
+            
+            const isNewStudent = newStudentBtn.classList.contains('active');
+            const name = document.getElementById('new-name').value.trim();
+            const email = document.getElementById('new-email').value.trim();
+            const password = document.getElementById('new-password').value.trim();
+            const confirmPassword = document.getElementById('confirm-password').value.trim();
+            
+            // Validation
+            let isValid = true;
+            
+            if (!name) {
+                document.getElementById('name-error').textContent = 'Please enter your name';
+                document.getElementById('new-name').parentElement.parentElement.classList.add('show-error');
+                isValid = false;
+            }
+            
+            if (!email) {
+                document.getElementById('new-email-error').textContent = 'Please enter email address';
+                document.getElementById('new-email').parentElement.parentElement.classList.add('show-error');
+                isValid = false;
+            } else if (!validateEmailDomain(email)) {
+                document.getElementById('new-email-error').textContent = 'Only @clg.edu.in email addresses are allowed';
+                document.getElementById('new-email').parentElement.parentElement.classList.add('show-error');
+                isValid = false;
+            }
+            
+            if (password.length < 6) {
+                document.getElementById('new-password-error').textContent = 'Password must be at least 6 characters';
+                document.getElementById('new-password').parentElement.parentElement.classList.add('show-error');
+                isValid = false;
+            }
+            
+            if (password !== confirmPassword) {
+                document.getElementById('confirm-password-error').textContent = 'Passwords do not match';
+                document.getElementById('confirm-password').parentElement.parentElement.classList.add('show-error');
+                isValid = false;
+            }
+            
+            if (isNewStudent) {
+                const branch = document.getElementById('student-branch').value;
+                if (!branch) {
+                    document.getElementById('branch-error').textContent = 'Please select a branch';
+                    document.getElementById('student-branch').parentElement.parentElement.classList.add('show-error');
+                    isValid = false;
+                }
+            } else {
+                const branch = document.getElementById('faculty-branch').value;
+                if (!branch) {
+                    document.getElementById('faculty-branch-error').textContent = 'Please select a department';
+                    document.getElementById('faculty-branch').parentElement.parentElement.classList.add('show-error');
+                    isValid = false;
+                }
+            }
+            
+            if (!isValid) return;
+            
+            if (isNewStudent) {
+                // Create student account
+                const branch = document.getElementById('student-branch').value;
+                const studentId = document.getElementById('student-id').value.trim();
+                
+                const newStudent = {
+                    name,
+                    email,
+                    password,
+                    branch,
+                    id: studentId || undefined,
+                    enrollmentYear: new Date().getFullYear(),
+                    phone: '',
+                    address: ''
+                };
+                
+                const result = dataManager.addStudent(newStudent);
+                
+                if (result.success) {
+                    currentUser = result.data;
+                    isFaculty = false;
+                    showStudentDashboard();
+                    alert('Account created successfully! Welcome to EduTracker.');
+                } else {
+                    document.getElementById('new-email-error').textContent = result.message;
+                    document.getElementById('new-email').parentElement.parentElement.classList.add('show-error');
+                }
+            } else {
+                // Create faculty account
+                const branch = document.getElementById('faculty-branch').value;
+                const employeeId = document.getElementById('employee-id').value.trim();
+                
+                const newFaculty = {
+                    name,
+                    email,
+                    password,
+                    branch,
+                    employeeId: employeeId || undefined,
+                    designation: 'Professor',
+                    department: branch,
+                    phone: ''
+                };
+                
+                const result = dataManager.addFaculty(newFaculty);
+                
+                if (result.success) {
+                    currentUser = result.data;
+                    isFaculty = true;
+                    showFacultyDashboard();
+                    alert('Account created successfully! Welcome to EduTracker.');
+                } else {
+                    document.getElementById('new-email-error').textContent = result.message;
+                    document.getElementById('new-email').parentElement.parentElement.classList.add('show-error');
+                }
+            }
+        }
+
+        // Show student dashboard
+        function showStudentDashboard() {
+            loginPage.style.display = 'none';
+            facultyDashboard.style.display = 'none';
+            studentDashboard.style.display = 'block';
+            
+            // Update navigation
+            updateNavigation();
+            
+            // Hide all content sections
+            hideAllContentSections();
+            
+            // Update student name
+            document.getElementById('student-name').textContent = currentUser.name;
+            
+            // Load profile information
+            loadStudentProfile();
+            
+            // Load reminders
+            loadStudentReminders();
+            
+            // Calculate and display attendance percentage
+            const studentAttendance = dataManager.getAttendanceByStudent(currentUser.id);
+            const presentCount = studentAttendance.filter(a => a.status === 'present').length;
+            const attendancePercentage = studentAttendance.length > 0 ? 
+                Math.round((presentCount / studentAttendance.length) * 100) : 0;
+            document.getElementById('student-attendance').textContent = `${attendancePercentage}%`;
+            
+            // Calculate GPA
+            const performance = dataManager.getPerformanceByStudent(currentUser.id);
+            const gpa = calculateGPA(performance);
+            document.getElementById('student-performance').textContent = `${gpa} GPA`;
+            
+            // Count placement applications
+            const applications = dataManager.getApplicationsByStudent(currentUser.id);
+            document.getElementById('student-placements').textContent = `${applications.length} Applied`;
+            
+            // Add click events to cards
+            document.getElementById('attendance-block').addEventListener('click', () => showContentSection('attendance-section'));
+            document.getElementById('performance-block').addEventListener('click', () => showContentSection('performance-section'));
+            document.getElementById('placements-block').addEventListener('click', () => showContentSection('placements-section'));
+            
+            // Populate tables
+            populateStudentAttendanceTable();
+            populateStudentPerformanceTable();
+            populateStudentPlacementTable();
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+
+        // Load student reminders
+        function loadStudentReminders() {
+            const remindersContainer = document.getElementById('reminders-container');
+            remindersContainer.innerHTML = '';
+            
+            const studentReminders = dataManager.getRemindersByStudent(currentUser.id);
+            
+            if (studentReminders.length === 0) {
+                remindersContainer.innerHTML = `
+                    <div class="reminder-item">
+                        <div class="reminder-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="reminder-content">
+                            <div class="reminder-title">No New Reminders</div>
+                            <div class="reminder-desc">You're all caught up!</div>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Sort by date (newest first)
+            studentReminders.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            // Show only unread or recent reminders
+            const recentReminders = studentReminders.filter(r => !r.read).slice(0, 5);
+            
+            recentReminders.forEach(reminder => {
+                const reminderItem = document.createElement('div');
+                reminderItem.className = `reminder-item ${reminder.type}`;
+                
+                let icon = 'fas fa-bell';
+                let title = reminder.title;
+                
+                if (reminder.type === 'absent') {
+                    icon = 'fas fa-calendar-times';
+                } else if (reminder.type === 'placement') {
+                    icon = 'fas fa-briefcase';
+                    if (reminder.description.includes('selected')) {
+                        title = '🎉 ' + title;
+                    } else if (reminder.description.includes('waiting')) {
+                        title = '⏳ ' + title;
+                    }
+                } else if (reminder.type === 'offer') {
+                    icon = 'fas fa-bullhorn';
+                }
+                
+                reminderItem.innerHTML = `
+                    <div class="reminder-icon">
+                        <i class="${icon}"></i>
+                    </div>
+                    <div class="reminder-content">
+                        <div class="reminder-title">${title}</div>
+                        <div class="reminder-desc">${reminder.description}</div>
+                        <div class="reminder-date">${formatDate(reminder.date)}</div>
+                    </div>
+                `;
+                
+                // Mark as read when clicked
+                reminderItem.addEventListener('click', () => {
+                    dataManager.markReminderAsRead(reminder.id);
+                    reminderItem.style.opacity = '0.7';
+                });
+                
+                remindersContainer.appendChild(reminderItem);
+            });
+        }
+
+        // Show faculty dashboard
+        function showFacultyDashboard() {
+            loginPage.style.display = 'none';
+            studentDashboard.style.display = 'none';
+            facultyDashboard.style.display = 'block';
+            
+            // Update navigation
+            updateNavigation();
+            
+            // Hide all content sections
+            hideAllContentSections();
+            
+            // Update faculty name
+            document.getElementById('faculty-name').textContent = currentUser.name;
+            
+            // Load profile information
+            loadFacultyProfile();
+            
+            // Calculate and display faculty stats
+            const facultyStudents = dataManager.getStudents().filter(s => s.faculty === currentUser.name);
+            document.getElementById('faculty-students').textContent = facultyStudents.length;
+            
+            // Calculate average performance
+            const attendance = dataManager.getAttendanceByFaculty(currentUser.name);
+            const presentCount = attendance.filter(a => a.status === 'present').length;
+            const attendancePercentage = attendance.length > 0 ? 
+                Math.round((presentCount / attendance.length) * 100) : 0;
+            document.getElementById('faculty-performance').textContent = `${attendancePercentage}%`;
+            
+            // Add click events to cards
+            document.getElementById('faculty-attendance-block').addEventListener('click', () => showContentSection('faculty-attendance-section'));
+            document.getElementById('faculty-performance-block').addEventListener('click', () => showContentSection('faculty-performance-section'));
+            document.getElementById('faculty-placements-block').addEventListener('click', () => showContentSection('faculty-placements-section'));
+            
+            // Populate tables
+            populateFacultyAttendanceTable();
+            populateFacultyPerformanceTable();
+            populateFacultyPlacementsTable();
+            
+            // Update dropdowns
+            populateStudentSelect();
+            populatePerformanceStudentSelect();
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+
+        // Show dashboard view (hide content sections)
+        function showDashboardView() {
+            hideAllContentSections();
+            
+            // Show dashboard cards
+            document.querySelector('.dashboard-cards').style.display = 'grid';
+            document.querySelector('.profile-section').style.display = 'block';
+            
+            // Show reminders block for students
+            if (!isFaculty) {
+                document.getElementById('student-reminders').style.display = 'block';
+            }
+        }
+
+        // Show specific content section
+        function showContentSection(sectionId) {
+            // Hide all content sections
+            hideAllContentSections();
+            
+            // Hide dashboard cards and profile
+            document.querySelector('.dashboard-cards').style.display = 'none';
+            document.querySelector('.profile-section').style.display = 'none';
+            
+            // Hide reminders for students
+            if (!isFaculty) {
+                document.getElementById('student-reminders').style.display = 'none';
+            }
+            
+            // Show the selected section
+            document.getElementById(sectionId).style.display = 'block';
+        }
+
+        // Hide all content sections
+        function hideAllContentSections() {
+            contentSections.forEach(section => {
+                section.style.display = 'none';
+            });
+        }
+
+        // Load student profile information
+        function loadStudentProfile() {
+            const profileContainer = document.getElementById('student-profile-info');
+            profileContainer.innerHTML = '';
+            
+            const profileData = [
+                { label: 'Student ID', value: currentUser.id, icon: 'id-card' },
+                { label: 'Email', value: currentUser.email, icon: 'envelope' },
+                { label: 'Branch', value: currentUser.branch, icon: 'building' },
+                { label: 'Assigned Faculty', value: currentUser.faculty, icon: 'chalkboard-teacher' },
+                { label: 'Enrollment Year', value: currentUser.enrollmentYear || new Date().getFullYear(), icon: 'calendar-alt' },
+                { label: 'Phone', value: currentUser.phone || 'Not provided', icon: 'phone' },
+                { label: 'Address', value: currentUser.address || 'Not provided', icon: 'map-marker-alt' }
+            ];
+            
+            profileData.forEach(item => {
+                const profileItem = document.createElement('div');
+                profileItem.className = 'profile-item';
+                profileItem.innerHTML = `
+                    <div class="profile-label">
+                        <i class="fas fa-${item.icon}"></i> ${item.label}
+                    </div>
+                    <div class="profile-value">${item.value}</div>
+                `;
+                profileContainer.appendChild(profileItem);
+            });
+        }
+
+        // Load faculty profile information
+        function loadFacultyProfile() {
+            const profileContainer = document.getElementById('faculty-profile-info');
+            profileContainer.innerHTML = '';
+            
+            const profileData = [
+                { label: 'Employee ID', value: currentUser.employeeId || 'Not provided', icon: 'id-card' },
+                { label: 'Email', value: currentUser.email, icon: 'envelope' },
+                { label: 'Department', value: currentUser.department || currentUser.branch, icon: 'building' },
+                { label: 'Designation', value: currentUser.designation || 'Professor', icon: 'user-tie' },
+                { label: 'Phone', value: currentUser.phone || 'Not provided', icon: 'phone' }
+            ];
+            
+            profileData.forEach(item => {
+                const profileItem = document.createElement('div');
+                profileItem.className = 'profile-item';
+                profileItem.innerHTML = `
+                    <div class="profile-label">
+                        <i class="fas fa-${item.icon}"></i> ${item.label}
+                    </div>
+                    <div class="profile-value">${item.value}</div>
+                `;
+                profileContainer.appendChild(profileItem);
+            });
+        }
+
+        // Show edit profile modal
+        function showEditProfileModal(type) {
+            editProfileModal.style.display = 'flex';
+            editProfileForm.reset();
+            
+            if (type === 'student') {
+                document.getElementById('edit-profile-type').value = 'student';
+                document.getElementById('edit-profile-id').value = currentUser.id;
+                document.getElementById('edit-name').value = currentUser.name;
+                document.getElementById('edit-email').value = currentUser.email;
+                document.getElementById('edit-branch').value = currentUser.branch;
+                
+                // Show faculty assignment field
+                document.getElementById('edit-faculty-assign-group').style.display = 'block';
+                populateEditFacultyDropdown();
+                document.getElementById('edit-assigned-faculty').value = currentUser.faculty;
+            } else {
+                document.getElementById('edit-profile-type').value = 'faculty';
+                document.getElementById('edit-profile-id').value = currentUser.id;
+                document.getElementById('edit-name').value = currentUser.name;
+                document.getElementById('edit-email').value = currentUser.email;
+                document.getElementById('edit-branch').value = currentUser.branch;
+                
+                // Hide faculty assignment field
+                document.getElementById('edit-faculty-assign-group').style.display = 'none';
+            }
+        }
+
+        // Populate edit faculty dropdown
+        function populateEditFacultyDropdown() {
+            const dropdown = document.getElementById('edit-assigned-faculty');
+            const faculty = dataManager.getFaculty();
+            
+            // Clear existing options except the first one
+            while (dropdown.options.length > 1) {
+                dropdown.remove(1);
+            }
+            
+            // Add faculty options
+            faculty.forEach(f => {
+                const option = document.createElement('option');
+                option.value = f.name;
+                option.textContent = f.name;
+                dropdown.appendChild(option);
+            });
+        }
+
+        // Handle edit profile form submission
+        function handleEditProfile(e) {
+            e.preventDefault();
+            
+            const profileType = document.getElementById('edit-profile-type').value;
+            const id = document.getElementById('edit-profile-id').value;
+            const name = document.getElementById('edit-name').value;
+            const email = document.getElementById('edit-email').value;
+            const branch = document.getElementById('edit-branch').value;
+            
+            // Validate email domain
+            if (!validateEmailDomain(email)) {
+                alert('Only @clg.edu.in email addresses are allowed');
+                return;
+            }
+            
+            if (profileType === 'student') {
+                const assignedFaculty = document.getElementById('edit-assigned-faculty').value;
+                
+                const updatedData = {
+                    name,
+                    email,
+                    branch,
+                    faculty: assignedFaculty
+                };
+                
+                dataManager.updateStudent(id, updatedData);
+                currentUser = dataManager.getStudentById(id);
+                loadStudentProfile();
+                alert('Student profile updated successfully!');
+            } else {
+                const updatedData = {
+                    name,
+                    email,
+                    branch
+                };
+                
+                dataManager.updateFaculty(id, updatedData);
+                currentUser = dataManager.getFacultyById(id);
+                loadFacultyProfile();
+                alert('Faculty profile updated successfully!');
+            }
+            
+            editProfileModal.style.display = 'none';
+        }
+
+        // Generate QR code for attendance
+        function generateQRCode() {
+            // Generate unique session ID
+            qrSessionId = 'QR' + Date.now();
+            
+            // Create QR data
+            const qrData = JSON.stringify({
+                sessionId: qrSessionId,
+                facultyId: currentUser.id,
+                facultyName: currentUser.name,
+                subject: 'Current Class',
+                timestamp: new Date().toISOString(),
+                expiresIn: 15 // seconds
+            });
+            
+            // Clear previous QR code
+            const qrContainer = document.getElementById('qr-code-container');
+            qrContainer.innerHTML = '';
+            
+            // Generate QR code
+            QRCode.toCanvas(qrContainer, qrData, {
+                width: 200,
+                height: 200,
+                margin: 1,
+                color: {
+                    dark: '#3A3A52',
+                    light: '#FFFFFF'
+                }
+            }, function(error) {
+                if (error) console.error(error);
+            });
+            
+            // Create QR session
+            const expiresAt = new Date(Date.now() + 15000).toISOString();
+            const qrSession = {
+                id: qrSessionId,
+                facultyId: currentUser.id,
+                facultyName: currentUser.name,
+                createdAt: new Date().toISOString(),
+                expiresAt: expiresAt,
+                isActive: true,
+                scannedStudents: []
+            };
+            
+            dataManager.addQRSession(qrSession);
+            scannedStudents = [];
+            
+            // Show modal
+            qrModal.style.display = 'flex';
+            document.getElementById('qr-modal-title').textContent = `QR Attendance - ${currentUser.name}`;
+            document.getElementById('scanned-students').style.display = 'none';
+            
+            // Start timer
+            startQRTimer(15);
+            
+            // Simulate student scanning (for demo purposes)
+            // In a real app, this would be done via actual QR scanning
+            simulateStudentScanning();
+        }
+
+        // Start QR timer
+        function startQRTimer(seconds) {
+            let timeLeft = seconds;
+            const timerElement = document.getElementById('qr-time-left');
+            const timerContainer = document.getElementById('qr-timer');
+            
+            // Reset timer classes
+            timerContainer.classList.remove('qr-timer-warning', 'qr-timer-danger');
+            
+            // Update timer every second
+            qrTimer = setInterval(() => {
+                timeLeft--;
+                timerElement.textContent = timeLeft;
+                
+                // Update color based on time left
+                if (timeLeft <= 5) {
+                    timerContainer.classList.add('qr-timer-danger');
+                } else if (timeLeft <= 10) {
+                    timerContainer.classList.add('qr-timer-warning');
+                }
+                
+                // Close modal when timer reaches 0
+                if (timeLeft <= 0) {
+                    clearInterval(qrTimer);
+                    closeQRModal();
+                    
+                    // Mark unscanned students as absent
+                    markAbsentForUnscannedStudents();
+                }
+            }, 1000);
+        }
+
+        // Simulate student scanning (for demo)
+        function simulateStudentScanning() {
+            // Get faculty's students
+            const facultyStudents = dataManager.getStudents().filter(s => s.faculty === currentUser.name);
+            
+            // Simulate scanning for some students
+            setTimeout(() => {
+                if (facultyStudents.length > 0) {
+                    scanStudentQR(facultyStudents[0].id);
+                }
+            }, 2000);
+            
+            setTimeout(() => {
+                if (facultyStudents.length > 1) {
+                    scanStudentQR(facultyStudents[1].id);
+                }
+            }, 4000);
+        }
+
+        // Scan student QR (simulated)
+        function scanStudentQR(studentId) {
+            const student = dataManager.getStudentById(studentId);
+            if (!student) return;
+            
+            // Add to scanned students list
+            scannedStudents.push(student);
+            updateScannedStudentsList();
+            
+            // Mark student as present
+            const today = new Date().toISOString().split('T')[0];
+            const attendanceRecord = {
+                studentId: student.id,
+                studentName: student.name,
+                date: today,
+                subject: 'Current Class',
+                status: 'present',
+                faculty: currentUser.name,
+                qrSessionId: qrSessionId
+            };
+            
+            dataManager.addAttendance(attendanceRecord);
+            
+            // Update QR session
+            const sessions = dataManager.getQRSessions();
+            const currentSession = sessions.find(s => s.id === qrSessionId);
+            if (currentSession) {
+                currentSession.scannedStudents.push(studentId);
+                localStorage.setItem('edutracker_qr_sessions', JSON.stringify(sessions));
+            }
+        }
+
+        // Update scanned students list
+        function updateScannedStudentsList() {
+            const scannedList = document.getElementById('scanned-list');
+            scannedList.innerHTML = '';
+            
+            scannedStudents.forEach(student => {
+                const item = document.createElement('div');
+                item.className = 'scanned-item';
+                item.textContent = `${student.name} (${student.id})`;
+                scannedList.appendChild(item);
+            });
+            
+            document.getElementById('scanned-students').style.display = 'block';
+        }
+
+        // Mark unscanned students as absent
+        function markAbsentForUnscannedStudents() {
+            const facultyStudents = dataManager.getStudents().filter(s => s.faculty === currentUser.name);
+            const today = new Date().toISOString().split('T')[0];
+            
+            facultyStudents.forEach(student => {
+                if (!scannedStudents.find(s => s.id === student.id)) {
+                    // Check if attendance already exists for today
+                    const existingAttendance = dataManager.getAttendance().find(a => 
+                        a.studentId === student.id && 
+                        a.date === today && 
+                        a.subject === 'Current Class'
+                    );
+                    
+                    if (!existingAttendance) {
+                        const attendanceRecord = {
+                            studentId: student.id,
+                            studentName: student.name,
+                            date: today,
+                            subject: 'Current Class',
+                            status: 'absent',
+                            faculty: currentUser.name,
+                            qrSessionId: qrSessionId,
+                            remarks: 'Missed QR scan'
+                        };
+                        
+                        dataManager.addAttendance(attendanceRecord);
+                        
+                        // Add reminder for student
+                        const reminder = {
+                            studentId: student.id,
+                            type: 'absent',
+                            title: 'Attendance Alert',
+                            description: `You were marked absent for ${'Current Class'} on ${formatDate(today)}`,
+                            date: today,
+                            read: false
+                        };
+                        
+                        dataManager.addReminder(reminder);
+                    }
+                }
+            });
+            
+            // Refresh attendance table
+            populateFacultyAttendanceTable();
+            alert('QR session ended. Attendance marked for all students.');
+        }
+
+        // Close QR modal
+        function closeQRModal() {
+            clearInterval(qrTimer);
+            qrModal.style.display = 'none';
+            qrSessionId = null;
+            scannedStudents = [];
+        }
+
+        // Check for active QR session
+        function checkActiveQRSession() {
+            const activeSession = dataManager.getActiveQRSession();
+            if (activeSession) {
+                // If there's an active session, show a notification
+                console.log('Active QR session found:', activeSession);
+            }
+        }
+
+        // Show student scan modal
+        function showStudentScanModal() {
+            studentScanModal.style.display = 'flex';
+        }
+
+        // Show attendance modal
+        function showAttendanceModal() {
+            attendanceModal.style.display = 'flex';
+            attendanceForm.reset();
+            document.getElementById('attendance-date').value = new Date().toISOString().split('T')[0];
+        }
+
+        // Handle attendance update
+        function handleAttendanceUpdate(e) {
+            e.preventDefault();
+            
+            const studentId = document.getElementById('student-select').value;
+            const date = document.getElementById('attendance-date').value;
+            const subject = document.getElementById('attendance-subject').value;
+            const status = document.getElementById('attendance-status').value;
+            const remarks = document.getElementById('attendance-remarks').value;
+            
+            const student = dataManager.getStudentById(studentId);
+            
+            // Check if attendance already exists
+            const existingAttendance = dataManager.getAttendance().find(a => 
+                a.studentId === studentId && 
+                a.date === date && 
+                a.subject === subject
+            );
+            
+            if (existingAttendance) {
+                // Update existing record
+                dataManager.updateAttendance(existingAttendance.id, {
+                    status,
+                    remarks
+                });
+            } else {
+                // Add new record
+                const attendanceRecord = {
+                    studentId,
+                    studentName: student.name,
+                    date,
+                    subject,
+                    status,
+                    remarks,
+                    faculty: currentUser.name,
+                    qrSessionId: null
+                };
+                
+                dataManager.addAttendance(attendanceRecord);
+            }
+            
+            // If status is absent, add a reminder for the student
+            if (status === 'absent') {
+                const reminder = {
+                    studentId: studentId,
+                    type: 'absent',
+                    title: 'Attendance Alert',
+                    description: `You were marked absent for ${subject} on ${formatDate(date)}`,
+                    date: date,
+                    read: false
+                };
+                
+                dataManager.addReminder(reminder);
+            }
+            
+            attendanceModal.style.display = 'none';
+            populateFacultyAttendanceTable();
+            alert('Attendance updated successfully!');
+        }
+
+        // Handle performance update
+        function handlePerformanceUpdate(e) {
+            e.preventDefault();
+            
+            const studentId = document.getElementById('performance-student').value;
+            const subject = document.getElementById('performance-subject').value;
+            const midTerm = parseFloat(document.getElementById('midterm-marks').value);
+            const finalExam = parseFloat(document.getElementById('final-marks').value);
+            const assignments = parseFloat(document.getElementById('assignment-marks').value);
+            
+            const total = midTerm + finalExam + assignments;
+            const grade = calculateGrade(total);
+            
+            const student = dataManager.getStudentById(studentId);
+            
+            const performanceRecord = {
+                studentId,
+                studentName: student.name,
+                subject,
+                midTerm,
+                finalExam,
+                assignments,
+                total,
+                grade,
+                faculty: currentUser.name
+            };
+            
+            dataManager.addPerformance(performanceRecord);
+            
+            performanceModal.style.display = 'none';
+            populateFacultyPerformanceTable();
+            alert('Performance updated successfully!');
+        }
+
+        // Handle placement add
+        function handlePlacementAdd(e) {
+            e.preventDefault();
+            
+            const company = document.getElementById('placement-company').value;
+            const position = document.getElementById('placement-position').value;
+            const deadline = document.getElementById('placement-deadline').value;
+            const description = document.getElementById('placement-description').value;
+            
+            const placementRecord = {
+                company,
+                position,
+                deadline,
+                description,
+                status: 'open',
+                postedBy: currentUser.id
+            };
+            
+            dataManager.addPlacement(placementRecord);
+            
+            // Add reminder for all students in faculty's branch
+            const facultyStudents = dataManager.getStudents().filter(s => s.faculty === currentUser.name);
+            const today = new Date().toISOString().split('T')[0];
+            
+            facultyStudents.forEach(student => {
+                const reminder = {
+                    studentId: student.id,
+                    type: 'offer',
+                    title: 'New Placement Opportunity',
+                    description: `${company} is hiring ${position}`,
+                    date: today,
+                    read: false
+                };
+                
+                dataManager.addReminder(reminder);
+            });
+            
+            placementModal.style.display = 'none';
+            populateFacultyPlacementsTable();
+            alert('Placement opportunity added successfully!');
+        }
+
+        // Populate student select dropdowns
+        function populateStudentSelect() {
+            const studentSelect = document.getElementById('student-select');
+            studentSelect.innerHTML = '<option value="">Select a student</option>';
+            
+            const facultyStudents = dataManager.getStudents().filter(s => s.faculty === currentUser.name);
+            facultyStudents.forEach(student => {
+                const option = document.createElement('option');
+                option.value = student.id;
+                option.textContent = `${student.name} (${student.id}) - ${student.branch}`;
+                studentSelect.appendChild(option);
+            });
+        }
+
+        function populatePerformanceStudentSelect() {
+            const studentSelect = document.getElementById('performance-student');
+            studentSelect.innerHTML = '<option value="">Select a student</option>';
+            
+            const facultyStudents = dataManager.getStudents().filter(s => s.faculty === currentUser.name);
+            facultyStudents.forEach(student => {
+                const option = document.createElement('option');
+                option.value = student.id;
+                option.textContent = `${student.name} (${student.id})`;
+                studentSelect.appendChild(option);
+            });
+        }
+
+        // Populate student attendance table
+        function populateStudentAttendanceTable() {
+            const tableBody = document.getElementById('student-attendance-table').getElementsByTagName('tbody')[0];
+            tableBody.innerHTML = '';
+            
+            const studentAttendance = dataManager.getAttendanceByStudent(currentUser.id);
+            
+            // Sort by date (newest first)
+            studentAttendance.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            studentAttendance.forEach(record => {
+                const row = tableBody.insertRow();
+                row.innerHTML = `
+                    <td>${formatDate(record.date)}</td>
+                    <td>${record.subject}</td>
+                    <td>${record.faculty}</td>
+                    <td><span class="status-${record.status}">${record.status.toUpperCase()}</span></td>
+                    <td>${record.remarks || '-'}</td>
+                `;
+            });
+        }
+
+        // Populate student performance table
+        function populateStudentPerformanceTable() {
+            const tableBody = document.getElementById('student-performance-table').getElementsByTagName('tbody')[0];
+            tableBody.innerHTML = '';
+            
+            const studentPerformance = dataManager.getPerformanceByStudent(currentUser.id);
+            
+            studentPerformance.forEach(record => {
+                const row = tableBody.insertRow();
+                row.innerHTML = `
+                    <td>${record.subject}</td>
+                    <td>${record.midTerm}/30</td>
+                    <td>${record.finalExam}/50</td>
+                    <td>${record.assignments}/20</td>
+                    <td>${record.total}/100</td>
+                    <td><strong>${record.grade}</strong></td>
+                `;
+            });
+        }
+
+        // Populate student placement table
+        function populateStudentPlacementTable() {
+            const tableBody = document.getElementById('student-placement-table').getElementsByTagName('tbody')[0];
+            tableBody.innerHTML = '';
+            
+            const placements = dataManager.getPlacements();
+            const applications = dataManager.getApplicationsByStudent(currentUser.id);
+            
+            placements.forEach(placement => {
+                const application = applications.find(a => a.placementId === placement.id);
+                let status = 'Not Applied';
+                let statusClass = 'pending';
+                
+                if (application) {
+                    status = application.status;
+                    if (status === 'Selected') {
+                        statusClass = 'selected';
+                    } else if (status === 'Waiting List') {
+                        statusClass = 'waiting';
+                    } else if (status === 'Applied') {
+                        statusClass = 'pending';
+                    }
+                }
+                
+                const row = tableBody.insertRow();
+                row.innerHTML = `
+                    <td>${placement.company}</td>
+                    <td>${placement.position}</td>
+                    <td>${formatDate(placement.deadline)}</td>
+                    <td><span class="status-${statusClass}">${status}</span></td>
+                    <td>
+                        ${status === 'Not Applied' 
+                            ? '<button class="view-btn apply-placement-btn" data-id="${placement.id}">Apply Now</button>' 
+                            : '<button class="view-btn">View Details</button>'}
+                    </td>
+                `;
+            });
+            
+            // Add event listeners to apply buttons
+            document.querySelectorAll('.apply-placement-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const placementId = e.target.getAttribute('data-id');
+                    applyForPlacement(placementId);
+                });
+            });
+        }
+
+        // Populate faculty attendance table
+        function populateFacultyAttendanceTable() {
+            const tableBody = document.getElementById('faculty-attendance-table').getElementsByTagName('tbody')[0];
+            tableBody.innerHTML = '';
+            
+            const facultyAttendance = dataManager.getAttendanceByFaculty(currentUser.name);
+            
+            // Sort by date (newest first)
+            facultyAttendance.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            facultyAttendance.forEach(record => {
+                const row = tableBody.insertRow();
+                row.innerHTML = `
+                    <td>${record.studentId}</td>
+                    <td>${record.studentName}</td>
+                    <td>${formatDate(record.date)}</td>
+                    <td>${record.subject}</td>
+                    <td><span class="status-${record.status}">${record.status.toUpperCase()}</span></td>
+                    <td><button class="update-btn update-attendance-btn" data-id="${record.id}">Update</button></td>
+                `;
+            });
+            
+            // Add event listeners to update buttons
+            document.querySelectorAll('.update-attendance-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const attendanceId = e.target.getAttribute('data-id');
+                    const attendance = dataManager.getAttendance().find(a => a.id === attendanceId);
+                    
+                    if (attendance) {
+                        document.getElementById('student-select').value = attendance.studentId;
+                        document.getElementById('attendance-date').value = attendance.date;
+                        document.getElementById('attendance-subject').value = attendance.subject;
+                        document.getElementById('attendance-status').value = attendance.status;
+                        document.getElementById('attendance-remarks').value = attendance.remarks || '';
+                        
+                        attendanceModal.style.display = 'flex';
+                    }
+                });
+            });
+        }
+
+        // Populate faculty performance table
+        function populateFacultyPerformanceTable() {
+            const tableBody = document.getElementById('faculty-performance-table').getElementsByTagName('tbody')[0];
+            tableBody.innerHTML = '';
+            
+            const facultyStudents = dataManager.getStudents().filter(s => s.faculty === currentUser.name);
+            const allPerformance = dataManager.getPerformance();
+            
+            facultyStudents.forEach(student => {
+                const studentPerformance = allPerformance.filter(p => p.studentId === student.id);
+                
+                if (studentPerformance.length > 0) {
+                    studentPerformance.forEach(record => {
+                        const row = tableBody.insertRow();
+                        row.innerHTML = `
+                            <td>${student.id}</td>
+                            <td>${student.name}</td>
+                            <td>${record.subject}</td>
+                            <td>${record.midTerm}/30</td>
+                            <td>${record.finalExam}/50</td>
+                            <td><button class="update-btn update-performance-btn" data-student="${student.id}" data-subject="${record.subject}">Update</button></td>
+                        `;
+                    });
+                } else {
+                    const row = tableBody.insertRow();
+                    row.innerHTML = `
+                        <td>${student.id}</td>
+                        <td>${student.name}</td>
+                        <td colspan="3" style="text-align: center; color: var(--text);">No performance records yet</td>
+                        <td><button class="update-btn add-performance-btn" data-student="${student.id}">Add</button></td>
+                    `;
+                }
+            });
+            
+            // Add event listeners
+            document.querySelectorAll('.update-performance-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const studentId = e.target.getAttribute('data-student');
+                    const subject = e.target.getAttribute('data-subject');
+                    
+                    const performance = allPerformance.find(p => p.studentId === studentId && p.subject === subject);
+                    
+                    if (performance) {
+                        document.getElementById('performance-student').value = studentId;
+                        document.getElementById('performance-subject').value = performance.subject;
+                        document.getElementById('midterm-marks').value = performance.midTerm;
+                        document.getElementById('final-marks').value = performance.finalExam;
+                        document.getElementById('assignment-marks').value = performance.assignments;
+                        
+                        performanceModal.style.display = 'flex';
+                    }
+                });
+            });
+            
+            document.querySelectorAll('.add-performance-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const studentId = e.target.getAttribute('data-student');
+                    document.getElementById('performance-student').value = studentId;
+                    document.getElementById('performance-subject').value = '';
+                    document.getElementById('midterm-marks').value = '';
+                    document.getElementById('final-marks').value = '';
+                    document.getElementById('assignment-marks').value = '';
+                    
+                    performanceModal.style.display = 'flex';
+                });
+            });
+        }
+
+        // Populate faculty placements table
+        function populateFacultyPlacementsTable() {
+            const tableBody = document.getElementById('faculty-placements-table').getElementsByTagName('tbody')[0];
+            tableBody.innerHTML = '';
+            
+            const placements = dataManager.getPlacements().filter(p => p.postedBy === currentUser.id);
+            const students = dataManager.getStudents().filter(s => s.faculty === currentUser.name);
+            
+            placements.forEach(placement => {
+                const row = tableBody.insertRow();
+                row.innerHTML = `
+                    <td>${placement.company}</td>
+                    <td>${placement.position}</td>
+                    <td>${formatDate(placement.deadline)}</td>
+                    <td>${students.length} students eligible</td>
+                    <td>
+                        <button class="view-btn view-applications-btn" data-id="${placement.id}">View Applications</button>
+                    </td>
+                `;
+            });
+            
+            // Add button to add new placement
+            const addRow = tableBody.insertRow();
+            addRow.innerHTML = `
+                <td colspan="5" style="text-align: center; padding: 25px;">
+                    <button class="action-btn secondary-btn" id="add-placement-btn">
+                        <i class="fas fa-plus"></i> Add New Placement Opportunity
+                    </button>
+                </td>
+            `;
+            
+            document.getElementById('add-placement-btn').addEventListener('click', () => {
+                placementModal.style.display = 'flex';
+                placementForm.reset();
+                document.getElementById('placement-deadline').value = new Date().toISOString().split('T')[0];
+            });
+        }
+
+        // Apply for placement
+        function applyForPlacement(placementId) {
+            const placement = dataManager.getPlacements().find(p => p.id === placementId);
+            if (!placement) return;
+            
+            // Check if already applied
+            const existingApplication = dataManager.getApplications().find(a => 
+                a.studentId === currentUser.id && a.placementId === placementId
+            );
+            
+            if (existingApplication) {
+                alert('You have already applied for this position');
+                return;
+            }
+            
+            const application = {
+                studentId: currentUser.id,
+                placementId: placementId,
+                status: 'Applied',
+                appliedDate: new Date().toISOString().split('T')[0]
+            };
+            
+            dataManager.addApplication(application);
+            
+            // Add reminder for student
+            const reminder = {
+                studentId: currentUser.id,
+                type: 'placement',
+                title: 'Application Submitted',
+                description: `Your application for ${placement.position} at ${placement.company} has been submitted`,
+                date: new Date().toISOString().split('T')[0],
+                read: false
+            };
+            
+            dataManager.addReminder(reminder);
+            
+            alert('Application submitted successfully!');
+            populateStudentPlacementTable();
+            loadStudentReminders();
+        }
+
+        // Calculate GPA from performance records
+        function calculateGPA(performanceRecords) {
+            if (performanceRecords.length === 0) return '0.0';
+            
+            let totalPoints = 0;
+            let totalCredits = 0;
+            
+            performanceRecords.forEach(record => {
+                const grade = record.grade;
+                let points;
+                
+                switch(grade) {
+                    case 'A': points = 4.0; break;
+                    case 'B': points = 3.0; break;
+                    case 'C': points = 2.0; break;
+                    case 'D': points = 1.0; break;
+                    default: points = 0.0;
+                }
+                
+                // Assuming each subject is 3 credits
+                totalPoints += points * 3;
+                totalCredits += 3;
+            });
+            
+            return (totalPoints / totalCredits).toFixed(1);
+        }
+
+        // Calculate grade from total marks
+        function calculateGrade(total) {
+            if (total >= 90) return 'A';
+            if (total >= 80) return 'B';
+            if (total >= 70) return 'C';
+            if (total >= 60) return 'D';
+            return 'F';
+        }
+
+        // Format date for display
+        function formatDate(dateString) {
+            const options = { year: 'numeric', month: 'short', day: 'numeric' };
+            return new Date(dateString).toLocaleDateString('en-US', options);
+        }
+
+        // Clear error messages
+        function clearErrors() {
+            document.querySelectorAll('.show-error').forEach(el => {
+                el.classList.remove('show-error');
+            });
+        }
+
+        // Close all modals
+        function closeAllModals() {
+            document.querySelectorAll('.modal').forEach(modal => {
+                modal.style.display = 'none';
+            });
+        }
+
+        // Handle logout
+        function handleLogout(e) {
+            e.preventDefault();
+            currentUser = null;
+            isFaculty = false;
+            showLoginPage();
+        }
+
+        // Initialize the app when DOM is loaded
+        document.addEventListener('DOMContentLoaded', initApp);
+    </script>
+</body>
+</html>
